@@ -71,7 +71,7 @@ class Graph:
                 self.create_undirected_graph_adj(edges, num_vertices)
                 break
             else:
-                print('Andha hai kya ****. Firse try kar')
+                print('Try again')
                 is_directed = None
 
     def create_directed_graph_adj(self, edges, vertices):
@@ -459,6 +459,10 @@ class Graph:
                     heap[v] = dist[v]
 
         return dist
+
+    # write bellman ford algo
+    # find negative cycles i.e. print nodes of negative cycles
+    # reconstruct path to find infinite arbitrage from source to some node t including negative cycle
 
 
 def main():
