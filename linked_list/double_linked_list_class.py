@@ -14,6 +14,24 @@ class DoubleLinkedList:
         self.head = None
         self.tail = None
 
+    def __str__(self):
+        dll = ''
+        curr = self.head
+        while curr:
+            if curr.next is None:
+                dll += str(curr.data)
+                return dll
+            dll += str(curr.data) + ' -> '
+            curr = curr.next
+
+    def __repr__(self):
+        return_str = ''
+        return_str += 'LinkedList: ' + self.__str__() + '\n'
+        return_str += 'Object Attributes: ' + '\n'
+        return_str += '\t' + 'Head: ' + str(self.head.data) + '\n'
+        return_str += '\t' + 'Tail: ' + str(self.tail.data) + '\n'
+        return return_str
+
     def push_front(self, data):
         new_node = Node(data)
         if not self.head:
@@ -133,6 +151,7 @@ class DoubleLinkedList:
             self.head = new_node
 
     def print_list(self):
+        # Use print() function instead on object
         temp = self.head
         while temp is not None:
             print(temp.data, '-> ', end='')
@@ -149,27 +168,29 @@ def main():
     dll.push_front(random.randint(1,20))
     # dll.print_list()
     dll.push_back(14)
-    dll.print_list()
+    # dll.print_list()
     dll.pop_back()
-    dll.print_list()
+    # dll.print_list()
     dll.pop_front()
-    dll.print_list()
+    # dll.print_list()
     node = dll.find(16)
     dll.add_after(node, 90)
-    dll.print_list()
+    # dll.print_list()
     dll.add_before(node, 69)
-    dll.print_list()
+    # dll.print_list()
     dll.erase_key(18, all_occurrence=True)
-    dll.print_list()
+    # dll.print_list()
     dll.push_back(90)
     dll.push_back(90)
     dll.push_back(68)
     dll.push_back(90)
-    dll.print_list()
+    # dll.print_list()
     dll.erase_key(90, all_occurrence=True)
-    dll.print_list()
+    # dll.print_list()
     dll.erase_node(node)
-    dll.print_list()
+    # dll.print_list()
+    print(dll)
+    print(repr(dll))
 
 
 if __name__ == '__main__':
