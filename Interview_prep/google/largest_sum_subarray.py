@@ -1,18 +1,19 @@
-# python 4
+# python 3
 
 # kadane's algorithm
 
 def largest_sum(arr):
-    sum = 0
+    curr_sum = 0
     max_sum = arr[0]
 
     for i in range(len(arr)):
-        sum += arr[i]
-        if sum < 0:
-            sum = 0
+        curr_sum += arr[i]
 
-        if sum > max_sum:
-            max_sum = sum
+        if curr_sum > max_sum:
+            max_sum = curr_sum
+
+        if curr_sum < 0:
+            curr_sum = 0
 
     return max_sum
 

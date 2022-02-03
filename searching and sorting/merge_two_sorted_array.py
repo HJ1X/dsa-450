@@ -1,5 +1,7 @@
 # python 3
 
+import math
+
 # In this problem, given two sorted arrays of length n and m, merge them as two sorted arrays i.e.
 # 1st array will be containing elements from 1 to n and second from n + 1 to n + m in sorted fashion
 
@@ -12,6 +14,8 @@
 # 3. Using shell sort approach.
 #       TC - O(NlogN)                       SC - O(1)
 
+
+# ----------------------------------------------------- GFG CODE ----------------------------------------------------- #
 def merge_gfg(ar1, ar2):
     m = len(ar1)
     n = len(ar2)
@@ -52,68 +56,116 @@ def merge_gfg_2(arr1, arr2):
     return arr1, arr2
 
 
-def merge(arr1, arr2):
-    n, m = len(arr1), len(arr2)
-    gap = (n + m) // 2
+def next_gap(gap):
+    if gap <= 1:
+        return 0
+    return (gap // 2) + (gap % 2)
 
+
+def merge_gap_gfg(arr1, arr2, n, m):
+    gap = n + m
+    gap = next_gap(gap)
+    while gap > 0:
+
+        # comparing elements in
+        # the first array.
+        i = 0
+        while i + gap < n:
+            if arr1[i] > arr1[i + gap]:
+                arr1[i], arr1[i + gap] = arr1[i + gap], arr1[i]
+
+            i += 1
+
+        # comparing elements in both arrays.
+        j = gap - n if gap > n else 0
+        while i < n and j < m:
+            if arr1[i] > arr2[j]:
+                arr1[i], arr2[j] = arr2[j], arr1[i]
+
+            i += 1
+            j += 1
+
+        if j < m:
+            # comparing elements in the
+            # second array.
+            j = 0
+            while j + gap < m:
+                if arr2[j] > arr2[j + gap]:
+                    arr2[j], arr2[j + gap] = arr2[j + gap], arr2[j]
+
+                j += 1
+
+        gap = next_gap(gap)
+
+
+# -------------------------------------------------------- MY CODE --------------------------------------------------- #
+def merge_gap(arr1, arr2, n, m):
+    gap = math.ceil((n + m) / 2)
     while gap > 0:
         i = 0
-        while i + gap < n + m:
-            j = i + gap
-            if i < n and j < n:
-                x = i
-                while x >= 0:
-                    if arr1[j] >= arr1[x]:
-                        break
-                    arr1[j], arr1[x] = arr1[x], arr1[j]
-                    x -= gap
-                    j -= gap
-
-            elif i < n and j >= n:
-                j -= n
-                x = i
-                while x >= 0:
-                    if arr2[j] >= arr1[x]:
-                        break
-                    arr2[j], arr1[x] = arr1[x], arr2[j]
-                    x -= gap
-                    j -= gap
-
-            else:
-                x = i - n
-                j -= n
-                while x >= 0:
-                    if arr2[j] >= arr2[x]:
-                        break
-                    arr2[j], arr2[x] = arr2[x], arr2[j]
-                    x -= gap
-                    j -= gap
-
-                if x < 0:
-                    x += n
-                    if arr2[j] >= arr1[x]:
-                        continue
-                    arr2[j], arr1[x] = arr1[x], arr2[j]
-                    x -= gap
-                    j = j - gap + n
-                    print(x, j)
-                    while x >= 0:
-                        if arr1[j] >= arr1[x]:
-                            break
-                        arr1[j], arr1[x] = arr1[x], arr1[j]
-                        x -= gap
+        # Traversing in 1st arr
+        while i + gap < n:
+            if arr1[i] > arr1[gap + i]:
+                arr1[i], arr1[gap + i] = arr1[gap + i], arr1[i]
             i += 1
-        gap //= 2
 
-    return arr1, arr2
+        # Traversing in 1st and 2nd arr
+        j = (i + gap) - n
+        while i < n and j < m:
+            if arr1[i] > arr2[j]:
+                arr1[i], arr2[j] = arr2[j], arr1[i]
+            i += 1
+            j += 1
+
+        # Traversing in 2nd arr
+        i = 0
+        while i + gap < m:
+            if arr2[i] > arr2[gap + i]:
+                arr2[i], arr2[gap + i] = arr2[gap + i], arr2[i]
+            i += 1
+
+        gap = next_gap(gap)
+
+
+def merge_insertion(arr1, arr2, n, m):
+    i = 0
+    while i < n:
+        if arr1[i] > arr2[0]:
+            # swap
+            arr1[i], arr2[0] = arr2[0], arr1[i]
+
+            # put arr2[0] at its correct pos
+            j = 1
+            val = arr2[0]
+            while j < m and arr2[j] < val:
+                arr2[j-1] = arr2[j]
+                j += 1
+            arr2[j-1] = val
+
+        i += 1
+
+
+def merge(arr1, arr2, n, m):
+    i, j = n - 1, 0
+
+    while i >= 0 and j < m and arr1[i] > arr2[j]:
+        arr1[i], arr2[j] = arr2[j], arr1[i]
+        i -= 1
+        j += 1
+
+    arr1.sort()
+    arr2.sort()
 
 
 def main():
     arr1 = list(map(int, input().split()))
     arr2 = list(map(int, input().split()))
-    res1_arr, res2_arr = merge_gfg_2(arr1, arr2)
-    print(*res1_arr)
-    print(*res2_arr)
+    # res1_arr, res2_arr = merge_gfg_2(arr1, arr2)
+    # print(*res1_arr)
+    # print(*res2_arr)
+    # print(merge_insertion(arr1, arr2, len(arr1), len(arr2)))
+    merge_gap_gfg(arr1, arr2, len(arr1), len(arr2))
+    print(arr1, arr2)
 
 
 if __name__ == '__main__':

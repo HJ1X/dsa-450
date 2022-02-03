@@ -64,7 +64,7 @@ def reverse(arr, l, r):
 
 
 def merge_inplace(arr, l, m, r):
-    # ptr1 will point to first occurence of positive element in first array
+    # ptr1 will point to first occurrence of positive element in first array
     ptr1 = l
     ptr2 = m + 1
 

@@ -1,22 +1,48 @@
 # python 3
 
+
 def find_min_jumps(arr):
     n = len(arr)
-    if arr[0] == 0:
-        return -1
 
-    max_reach = arr[0]
-    steps = arr[0]
     jumps = 0
-    for i in range(1, n):
+    max_reachable = 0
+    steps = 0
+
+    for i in range(n):
+        if i == n - 1:
+            return jumps
+
+        max_reachable = max(max_reachable, i + arr[i])
         steps -= 1
-        max_reach = max(max_reach, arr[i] + i)
-        if steps == 0:
+
+        if steps <= 0:
             jumps += 1
-            if i >= max_reach:
+            if max_reachable <= i:
                 return -1
-            steps = max_reach - i
-    return jumps
+
+            steps = max_reachable - i
+
+
+def find_min_jumps_dp(arr):
+    n = len(arr)
+
+    min_jumps = [0 for i in range(n)]
+    for i in range(n - 2, -1, -1):
+        if i + arr[i] <= n:
+            min_jumps[i] = 1
+
+        else:
+            min_jump_from_i = float('inf')
+            max_reachable = i + arr[i]
+
+            for j in range(i + 1, max_reachable + 1):
+                curr_min_jump = min_jumps[j] + 1
+                if curr_min_jump < min_jump_from_i:
+                    min_jump_from_i = curr_min_jump
+
+            min_jumps[i] = min_jump_from_i
+
+    return min_jumps[0]
 
 
 def main():

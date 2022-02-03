@@ -7,6 +7,20 @@
 
 # 2nd approach can be used when array cannot be modified. Given below:-
 
+def find_duplicate_negatives(arr):
+    n = len(arr)
+
+    # For every element in array, marking arr[element] negative.
+    for i in range(n):
+        index = abs(arr[i])     # Taking abs value as elements could be -ve
+        arr[index] *= -1
+
+    # Checking for positive number from 1st index because range is between 1 to n.
+    for i in range(1, n):
+        if arr[i] > 0:
+            return i
+
+
 def find_duplicate(arr):
     n = len(arr)
     slow, fast = arr[0], arr[0]
@@ -32,7 +46,8 @@ def find_duplicate(arr):
 
 def main():
     arr = list(map(int, input().split()))
-    print(find_duplicate(arr))
+    # print(find_duplicate(arr))
+    print(find_duplicate_negatives(arr))
 
 
 if __name__ == '__main__':

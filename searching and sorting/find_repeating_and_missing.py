@@ -1,8 +1,6 @@
 # python 3
-from math import factorial
 
 # Best solution is using XOR operations | GFG
-
 
 def find_rep_and_miss_xor(n, arr):
     xor = 0
@@ -34,27 +32,15 @@ def find_rep_and_miss_xor(n, arr):
 
 
 def find_rep_and_miss_using_two_equation(n, arr):
-    # This way cannot be used for large array as it gets difficult to store product of array
+    # This way causes issues for large float numbers
 
-    # sum_arr, n_factorial, prod_arr = 0, 1, 1
-    # for i in range(n):
-    #     sum_arr += arr[i]
-    #     n_factorial *= i + 1
-    #     prod_arr *= arr[i]
-    #
-    # expected_sum = (n * (n + 1)) // 2
-    #
-    # y = int(((sum_arr - expected_sum) * prod_arr) / (prod_arr - n_factorial))
-    # x = int(y + expected_sum - sum_arr)
-    #
-    # return y, x
-
-    # Alternate way (This way causes issues for large float numbers)
-    sum_n = (n * (n + 1)) // 2
-    prod_n = factorial(n)
+    sum_n = 0
+    prod_n = 1
 
     for i in range(n):
+        sum_n += i + 1
         sum_n -= arr[i]
+        prod_n *= i + 1
         prod_n /= arr[i]
 
     y = sum_n / (prod_n - 1)
@@ -64,16 +50,17 @@ def find_rep_and_miss_using_two_equation(n, arr):
 
 
 def find_rep_and_miss_using_two_equation_sum_and_sum_of_squares(n, arr):
-    # First, we are calculating expected sum, which is sum of series from 1 to n and 1_sq to n_sq
-    sum_n = n*(n+1)//2
-    sum_n_sq = n*(n+1)*((2*n)+1)//6
+    sum_n = 0
+    sum_n_sq = 0
 
-    # Now, we are subtracting every element from expected sums to form ES - S = y - x and ES_sq - S_sq = y_sq - x_sq
+    # Calculating ES - S = y - x and ES_sq - S_sq = y_sq - x_sq
     for i in range(n):
+        sum_n += i + 1
         sum_n -= arr[i]
+        sum_n_sq += (i+1) ** 2
         sum_n_sq -= arr[i] * arr[i]
 
-    # Now sum_n denotes ES - S and sum_n_sq denotes ES_sq - S_sq
+    # sum_n denotes ES - S and sum_n_sq denotes ES_sq - S_sq
     y = (sum_n + (sum_n_sq // sum_n)) // 2
     x = y - sum_n
 

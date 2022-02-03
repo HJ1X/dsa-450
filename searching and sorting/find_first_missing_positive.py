@@ -7,7 +7,9 @@ from typing import List
 def first_missing_positive(nums: List[int]) -> int:
     n = len(nums)
     for i in range(n):
-        index = nums[i] - 1
+        index = nums[i] - 1    # subtracting 1 due to zero based indexing
+
+        # swapping element at i with its correct position i.e. nums[nums[i]-1]
         while 1 <= nums[i] <= n and nums[index] != nums[i]:
             nums[index], nums[i] = nums[i], nums[index]
             index = nums[i] - 1
