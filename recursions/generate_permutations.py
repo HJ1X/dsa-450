@@ -52,7 +52,7 @@ def generate_permutations_lexi(string, answer, permutations):
         generate_permutations(remain_str, answer + char, permutations)
 
 
-def find_permutations_lexi(self, S):
+def find_permutations_lexi(S):
     S = ''.join(sorted(S))
     permutations = []
     generate_permutations(S, '', permutations)
@@ -60,9 +60,33 @@ def find_permutations_lexi(self, S):
 
 
 # ------------------------------------------------------------------------------------------------------------------ #
+def generate_permutations_unique(arr, index, permutations):
+    if index == len(arr) - 1:
+        permutations.append(arr.copy())
+        return
+
+    hash_set = set()
+    for i in range(index, len(arr)):
+        arr[i], arr[index] = arr[index], arr[i]
+
+        if arr[index] not in hash_set:
+            hash_set.add(arr[index])
+            generate_permutations(arr, index + 1, permutations)
+
+        arr[i], arr[index] = arr[index], arr[i]
+
+
+def find_permutations_unique(arr):
+    permutations = []
+    generate_permutations_unique(arr, 0, permutations)
+    return permutations
+
+
+# ------------------------------------------------------------------------------------------------------------------ #
 def main():
-    string = input()
-    print(find_permutations(string))
+    # string = input()
+    arr = list(map(int, input().split()))
+    print(find_permutations_unique(arr))
 
 
 if __name__ == '__main__':
