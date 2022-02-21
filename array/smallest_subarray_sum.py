@@ -8,39 +8,72 @@
 # such subarray, return 0 instead.
 
 def subarray_len(arr, target):
-    if len(arr) == 1:
-        if arr[0] >= target:
-            return 1
-        else:
-            return 0
-
-    min_size = float('inf')
+    min_size = len(arr) + 1
     i, j = 0, 0
-    window_sum = arr[0]
+    window_sum = 0
 
     while j < len(arr):
         if window_sum >= target:
-            if i == j:
-                return 1
-            if min_size > j - i + 1:
-                min_size = j - i + 1
+            if min_size > j - i:
+                min_size = j - i
             window_sum -= arr[i]
             i += 1
 
         else:
+            window_sum += arr[j]
             j += 1
-            if j < len(arr):
-                window_sum += arr[j]
 
-    if min_size == float('inf'):
+    if min_size == len(arr) + 1:
         return 0
-    return min_size
+    else:
+        return min_size
+
+
+def subarray_sum(arr, n, s):
+    i, j = 0, 0
+    curr_sum = 0
+
+    while j < n or curr_sum >= s:
+        if curr_sum == s:
+            return i + 1, j
+
+        elif curr_sum < s:
+            curr_sum += arr[j]
+            j += 1
+
+        else:
+            curr_sum -= arr[i]
+            i += 1
+
+    return [-1]
+
+
+def find_subarray_sum(arr, n, target):
+    hash_map = {}
+    curr_sum = 0
+    count = 0
+
+    for i in range(n):
+        curr_sum += arr[i]
+        if curr_sum - target in hash_map:
+            count += hash_map[curr_sum-target]
+        if curr_sum == target:
+            count += 1
+
+        if curr_sum in hash_map:
+            hash_map[curr_sum] += 1
+        else:
+            hash_map[curr_sum] = 1
+
+    return count
 
 
 def main():
-    arr = [12,28,83,4,25,26,25,2,25,25,25,12]
-    target = 213
-    print(subarray_len(arr, target))
+    arr = list(map(int, input().split()))
+    target = -3
+    # print(subarray_len(arr, target))
+    # print(subArraySum(arr, len(arr), target))
+    print(find_subarray_sum(arr, len(arr), target))
 
 
 if __name__ == '__main__':

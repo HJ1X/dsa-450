@@ -8,6 +8,9 @@ class Node:
         self.next = None
         self.prev = None
 
+    def __str__(self):
+        return f'data: {self.data}'
+
 
 class DoubleLinkedList:
     def __init__(self):
@@ -21,7 +24,7 @@ class DoubleLinkedList:
             if curr.next is None:
                 dll += str(curr.data)
                 return dll
-            dll += str(curr.data) + ' -> '
+            dll += str(curr.data) + ' <-> '
             curr = curr.next
 
     def __repr__(self):
@@ -31,6 +34,13 @@ class DoubleLinkedList:
         return_str += '\t' + 'Head: ' + str(self.head.data) + '\n'
         return_str += '\t' + 'Tail: ' + str(self.tail.data) + '\n'
         return return_str
+
+    @classmethod
+    def create_dll(cls, arr):
+        dll = cls()
+        for ele in arr:
+            dll.push_back(ele)
+        return dll
 
     def push_front(self, data):
         new_node = Node(data)
@@ -150,12 +160,18 @@ class DoubleLinkedList:
         if self.head is node:
             self.head = new_node
 
-    def print_list(self):
+    def print_list(self, head=None):
         # Use print() function instead on object
-        temp = self.head
-        while temp is not None:
-            print(temp.data, '-> ', end='')
-            temp = temp.next
+        if head is None:
+            head = self.head
+
+        curr = head
+        while curr is not None:
+            if curr.next is None:
+                print(curr.data)
+                return
+            print(curr.data, '<-> ', end='')
+            curr = curr.next
         print()
 
 

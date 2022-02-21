@@ -6,10 +6,24 @@ class Node:
         self.next = None
 
 
+def push_front(head, data):
+    new_node = Node(data)
+    new_node.next = head
+    return new_node
+
+
 class LinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
+
+    @staticmethod
+    def create_list(arr):
+        head = None
+        for data in reversed(arr):
+            head = push_front(head, data)
+
+        return head
 
     def push(self, data):
         new_node = Node(data)
@@ -59,13 +73,18 @@ class LinkedList:
         del temp.next
         return val
 
-    def print_list(self):
-        curr = self.head
+    @staticmethod
+    def print_list(head=None):
+        if not head:
+            return 'No list given'
+
+        curr = head
         if not curr:
             print('Empty list')
         while curr:
             print(curr.data, '-', end='', sep='')
             curr = curr.next
+        print()
 
     def reverse(self):
         prev = None
