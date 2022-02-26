@@ -28,6 +28,7 @@ from random import randint
 
 
 def shell_sort(arr):
+    # Better implementation on oneNote
     # Shell sort works on concept of insertion sort, with gap introduced to reduce number of swaps in
     # reverse sorted arrays and similar
 
@@ -84,24 +85,71 @@ def bucket_sort(arr):
 
 
 def radix_sort(arr):
-    max_digit = floor(log10(max(arr)) + 1)    # number of digits in maximum element
-    for digit_num in range(1, max_digit + 1):
-        bucket_arr = [[] for i in range(10)]
+    max_digit = int(log10(max(arr))) + 1
+
+    for digit in range(max_digit):
+        count_bucket = [[] for i in range(10)]
 
         for num in arr:
-            place_value = 10 ** digit_num
-            temp = num // place_value         # Ex. - 1482 // 100 = 14      14 will be used to calculate face value as 4 of 100th digit
-            face_value = temp % 10            # Since, base of numbers is 10 (decimal numbers)
+            temp = num
+            temp //= 10 ** digit        # 1482 // 10**2 = 14
+            digit_val = temp % 10       # 14 % 10 = 4, which is the digit_val (index) for count_bucket
 
-            bucket_arr[face_value].append(num)
+            count_bucket[digit_val].append(num)
 
-        arr = []
-        for i in range(len(bucket_arr)):
-            if bucket_arr[i]:
-                for element in bucket_arr[i]:
-                    arr.append(element)
+        i = 0
+        j = 0
+        while i < len(arr):
+            if count_bucket[j]:
+                for ele in count_bucket[j]:
+                    arr[i] = ele
+                    i += 1
+            j += 1
 
     return arr
+
+
+def counting_sort(arr):
+    k = max(arr)
+    count = [0 for i in range(k+1)]
+
+    for ele in arr:
+        count[ele] += 1
+
+    j = 0
+    i = 0
+
+    while i < len(arr):
+        if count[j] > 0:
+            arr[i] = j
+            count[j] -= 1
+        else:
+            while count[j] == 0:
+                j += 1
+            i -= 1
+        i += 1
+
+    return arr
+
+
+def counting_sort_standard(arr):
+    k = max(arr)
+    count = [0 for i in range(k + 1)]
+
+    for ele in arr:
+        count[ele] += 1
+
+    # Count will now store actual position of elements
+    for i in range(1, k+1):
+        count[i] += count[i-1]
+
+    output_arr = [-1 for i in range(len(arr))]
+    for i in range(len(arr)):
+        key = arr[i]
+        output_arr[count[key]-1] = key
+        count[key] -= 1
+
+    return output_arr
 
 
 def partition_equal_elements(arr, l, r):
@@ -147,9 +195,6 @@ def partition(arr, l, r):
 
 
 def quick_sort(arr, l, r):
-    # quick sort can be optimized for a sorted array by returning a flag from partition procedure
-    # when there are NO swaps in the entire for loop return flag and in main procedure return on false flag value
-
     if l > r:
         return
 
@@ -226,9 +271,11 @@ def selection_sort(arr):
 def main():
     arr = list(map(int, input().split()))
     # print(*insertion_sort(arr))
-    print(*quick_sort_equal_elements(arr, 0, len(arr) - 1))
+    # print(*quick_sort_equal_elements(arr, 0, len(arr) - 1))
     # print(shell_sort(arr))
     # print(quick_sort(arr, 0, len(arr) - 1))
+    # print(counting_sort_standard(arr))
+    print(radix_sort(arr))
 
 
 if __name__ == '__main__':

@@ -3,13 +3,9 @@
 def can_allocate_boards(arr, painters, max_time):
     n = len(arr)
     count = 1
-
     curr_time = 0
 
     for i in range(n):
-        if arr[i] > max_time:
-            return False
-
         if curr_time + arr[i] <= max_time:
             curr_time += arr[i]
 
@@ -23,43 +19,54 @@ def can_allocate_boards(arr, painters, max_time):
     return True
 
 
-def number_of_painters(arr, n, max_len):
-    total = 0
-    numPainters = 1
-
-    for i in arr:
-        total += i
-
-        if total > max_len:
-            # for next count
-            total = i
-            numPainters += 1
-
-    return numPainters
-
-
 def min_time(arr, n, k):
-    # ans = -1
-    # low, high = 0, int(10e9)
-    # while low <= high:
-    #     mid = (low + high) // 2
-    #     if can_allocate_boards(arr, k, mid):
-    #         ans = mid
-    #         high = mid - 1
-    #     else:
-    #         low = mid + 1
-    # return ans
+    ans = -1
+    low, high = 0, int(10e9)
 
-    lo = max(arr)
-    hi = sum(arr)
-    while lo < hi:
-        mid = lo + (hi - lo) // 2
-        requiredPainters = number_of_painters(arr, n, mid)
-        if requiredPainters <= k:
-            hi = mid
+    while low <= high:
+        mid = (low + high) // 2
+
+        if can_allocate_boards(arr, k, mid):
+            ans = mid
+            high = mid - 1
         else:
-            lo = mid + 1
-    return lo
+            low = mid + 1
+
+    return ans
+
+
+def calculate_num_painters(arr, max_paint_area):
+    count = 1
+    curr_board_sum = 0
+
+    for board_size in arr:
+        if curr_board_sum + board_size > max_paint_area:
+            count += 1
+            curr_board_sum = board_size
+
+        else:
+            curr_board_sum += board_size
+
+    return count
+
+
+def min_time_required(arr, k):
+    ans = None
+
+    low = max(arr)
+    high = sum(arr)
+
+    while low <= high:
+        mid = (low + high) // 2
+        painters_required = calculate_num_painters(arr, mid)
+
+        if painters_required <= k:
+            high = mid - 1
+            ans = mid
+        else:
+            low = mid + 1
+
+    return ans
 
 
 def main():

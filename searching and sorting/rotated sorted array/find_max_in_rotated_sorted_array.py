@@ -13,12 +13,29 @@ def find_max(arr):
         else:
             high = mid
 
-    return arr[low - 1]
+    return arr[low]
+
+
+def find_max_binary_search(arr):
+    n = len(arr)
+    low = 0
+    high = n-1
+
+    while low < high:
+        mid = (low + high) // 2
+
+        if arr[mid] > arr[high]:
+            low = mid + 1
+        else:
+            high = mid
+
+    return arr[low-1]
 
 
 def main():
-    arr = [6, 1, 2, 3, 4, 5]
+    arr = [7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6]
     print(find_max(arr))
+    print(find_max_binary_search(arr))
 
 
 if __name__ == '__main__':

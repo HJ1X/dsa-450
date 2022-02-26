@@ -54,11 +54,47 @@ def find_pages(arr, n, m):
     return ans
 
 
+def can_allocate_pages(arr, children, max_pages):
+    curr_allocation = 0
+    children -= 1     # Allocating to first child
+
+    for pages in arr:
+        if curr_allocation + pages <= max_pages:
+            curr_allocation += pages
+
+        else:
+            curr_allocation = pages
+            children -= 1
+
+        if children < 0:
+            return False
+
+    return True
+
+
+def find_min_pages(arr, children):
+    arr.sort()
+    min_of_pages_allocated = float('inf')
+
+    low = arr[-1]
+    high = sum(arr)
+    while low <= high:
+        mid = (low + high) // 2
+        if can_allocate_pages(arr, children, mid):
+            min_of_pages_allocated = mid
+            high = mid - 1
+        else:
+            low = mid + 1
+
+    return min_of_pages_allocated
+
+
 def main():
-    n = 8
-    arr = [250, 74, 159, 181, 23, 45, 129, 174]
-    m = 6
+    n = 4
+    arr = [12, 34, 67, 90]
+    m = 2
     print(find_pages(arr, n, m))
+    print(find_min_pages(arr, m))
 
 
 if __name__ == '__main__':

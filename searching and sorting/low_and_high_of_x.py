@@ -31,6 +31,35 @@ def find_low_high(arr, key):
     return -1, -1
 
 
+def find_extreme(arr, n, target, find_left):
+    low = 0
+    high = n - 1
+    i = -1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] < target:
+            low = mid + 1
+        elif arr[mid] > target:
+            high = mid - 1
+
+        else:
+            i = mid
+            if find_left:
+                high = mid - 1
+            else:
+                low = mid + 1
+
+    return i
+
+
+def find(arr, n, x):
+    left = find_extreme(arr, n, x, True)
+    right = find_extreme(arr, n, x, False)
+    return left, right
+
+
 def main():
     n, x = list(map(int, input().split()))
     arr = list(map(int, input().split()))

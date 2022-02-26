@@ -144,10 +144,7 @@ class Graph:
         return adj_rev
 
     # --------------------------------- Find connected components in undirected graph -------------------------------- #
-    def explore(self, vertex, visited, adj=None):
-        if not adj:
-            adj = self.adj
-
+    def explore(self, vertex, visited, adj):
         visited[vertex] = True
         for node in adj[vertex]:
             if not visited[node]:

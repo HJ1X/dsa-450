@@ -5,6 +5,9 @@ class Node:
         self.data = data
         self.next = None
 
+    def __repr__(self):
+        return str(self.data)
+
 
 def push_front(head, data):
     new_node = Node(data)
@@ -16,6 +19,17 @@ class LinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
+
+    def __repr__(self):
+        llist = ''
+        curr = self.head
+        while curr:
+            if not curr.next:
+                llist += str(curr.data)
+                return llist
+            else:
+                llist += str(curr.data) + ' -> '
+            curr = curr.next
 
     @staticmethod
     def create_list(arr):
