@@ -43,7 +43,7 @@ Example graphs input:
 #     is infinite or not
 
 
-from linked_list.reverse_linked_list import LinkedList
+from linked_list.linked_list_basics import LinkedList
 from collections import namedtuple, deque
 from heapdict import heapdict
 

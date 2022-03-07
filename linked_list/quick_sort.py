@@ -1,5 +1,5 @@
 # python 3
-from linked_list.reverse_linked_list import Node
+from linked_list.linked_list_basics import Node
 
 
 def partition(head, x):

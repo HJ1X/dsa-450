@@ -1,41 +1,45 @@
 # python 3
 
+from linked_list.linked_list_basics import Node
 
-def sorted_merge(head1, head2):
-    # code here
 
-    temp = None
-    res = None
-    if head1.data < head2.data:
-        temp = head1
-        res = head1
-        head1 = head1.next
-    else:
-        temp = head2
-        res = head2
-        head2 = head2.next
+def merge(head1, head2):
+    new_head = Node(-1)
 
-    while head1 and head2:
-        if head1.data < head2.data:
-            temp.next = head1
-            head1 = head1.next
+    curr1 = head1
+    curr2 = head2
+
+    # if curr1.data < curr2.data:
+    #     new_head = curr1
+    #     curr1 = curr1.next
+
+    # else:
+    #     new_head = curr2
+    #     curr2 = curr2.next
+
+    curr_new = new_head
+
+    while curr1 is not None and curr2 is not None:
+        if curr1.data < curr2.data:
+            curr_new.next = curr1
+            curr1 = curr1.next
+
         else:
-            temp.next = head2
-            head2 = head2.next
+            curr_new.next = curr2
+            curr2 = curr2.next
 
-    if head1:
-        temp.next = head1
+        curr_new = curr_new.next
 
-    if head2:
-        temp.next = head2
+    if curr1:
+        curr_new.next = curr1
+    else:
+        curr_new.next = curr2
 
-    return res
+    return new_head.next
 
 
 def main():
-    head1 = None # should be node
-    head2 = None # should be node
-    print(sorted_merge(head1, head2))
+    pass
 
 
 if __name__ == '__main__':

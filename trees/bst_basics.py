@@ -95,11 +95,11 @@ class BinarySearchTree:
         if root.data == key:
             return root
         elif root.data > key:
-            if root.left is not None:
+            if root.left:
                 return BinarySearchTree.__find_place(root.left, key)
             return root
         elif root.data < key:
-            if root.right is not None:
+            if root.right:
                 return BinarySearchTree.__find_place(root.right, key)
             return root
 
@@ -112,13 +112,13 @@ class BinarySearchTree:
 
     @staticmethod
     def _right_ancestor(node):
-        if node.parent is None:
+        if node._parent is None:
             return None
 
-        if node.key < node.parent.key:
-            return node.parent
+        if node.key < node._parent.key:
+            return node._parent
         else:
-            return BinarySearchTree._right_ancestor(node.parent)
+            return BinarySearchTree._right_ancestor(node._parent)
 
     @staticmethod
     def __adjust_height(node):
@@ -132,47 +132,47 @@ class BinarySearchTree:
         return
 
     def __rotate_left(self, node):
-        parent = node.parent
+        parent = node._parent
         left_child = node.left
         if left_child is None:
             return
         right_of_left = left_child.right
 
-        left_child.parent = parent
-        if parent is not None:
+        left_child._parent = parent
+        if parent:
             parent.appropriate_child(node, left_child)
 
-        node.parent = left_child
+        node._parent = left_child
         left_child.right = node
 
         node.left = right_of_left
-        if right_of_left is not None:
-            right_of_left.parent = node
+        if right_of_left:
+            right_of_left._parent = node
 
-        if left_child.parent is None:
+        if left_child._parent is None:
             self.root = left_child
 
         return
 
     def __rotate_right(self, node):
-        parent = node.parent
+        parent = node._parent
         right_child = node.right
         if right_child is None:
             return
         left_of_right = right_child.left
 
-        right_child.parent = parent
-        if parent is not None:
+        right_child._parent = parent
+        if parent:
             parent.appropriate_child(node, right_child)
 
-        node.parent = right_child
+        node._parent = right_child
         right_child.left = node
 
         node.right = left_of_right
-        if left_of_right is not None:
-            left_of_right.parent = node
+        if left_of_right:
+            left_of_right._parent = node
 
-        if right_child.parent is None:
+        if right_child._parent is None:
             self.root = right_child
 
         return
@@ -189,7 +189,7 @@ class BinarySearchTree:
 
         self.__rotate_left(node)
         self.__adjust_height(node)
-        self.__adjust_height(node.parent)
+        self.__adjust_height(node._parent)
 
     def __rebalance_left(self, node):
         right_node = node.right
@@ -203,9 +203,12 @@ class BinarySearchTree:
 
         self.__rotate_right(node)
         self.__adjust_height(node)
-        self.__adjust_height(node.parent)
+        self.__adjust_height(node._parent)
 
     def __rebalance(self, node):
+        if node is None:
+            return
+
         parent = node.parent
         left_height = node.left.height if node.left else 0
         right_height = node.right.height if node.right else 0
@@ -215,11 +218,12 @@ class BinarySearchTree:
         if right_height > left_height + 1:
             self.__rebalance_left(node)
         self.__adjust_height(node)
-        if parent is not None:
+        if parent:
             self.__rebalance(parent)
         return
 
     def __insert(self, key):
+        """Basic insert procedure for Binary search trees"""
         node = self.find_place(key)
         new_node = Node(key)
 
@@ -237,6 +241,37 @@ class BinarySearchTree:
             node.left = new_node
             new_node.parent = node
         return
+
+    def __delete(self, key):
+        """
+        :param key: Key of the node to be deleted
+        :return: Return the old parent of node replacing deleted node
+        """
+        node = self.find(key)
+        if not node:
+            return
+
+        if node.right is None:
+            # promote node.left
+            if node.left:
+                node.left._parent = node.parent
+
+            if node.parent:
+                node.parent.appropriate_child(node, node.left)
+            else:    # Root node is being deleted
+                self.root = node.left
+            return node.parent
+
+        else:
+            next_node = self.next(node)   # node.right = None condition has already been checked
+            node.data = next_node.data
+
+            # Promote next_node.right
+            if next_node.right:
+                next_node.right._parent = next_node.parent
+            next_node.parent.appropriate_child(next_node, next_node.right)
+
+            return next_node.parent
 
     # ------------------------------------------------ Main methods --------------------------------------------- #
     def find(self, key):
@@ -259,12 +294,12 @@ class BinarySearchTree:
         Takes input of node and not key. Find procedure should be used before to find node with key
 
         :param node: node of a BST
-        :return: Key of node next to the given node
+        :return: Node next to the given node
         """
-        if node.right is not None:
-            return BinarySearchTree._left_descendant(node.right).data
+        if node.right:
+            return BinarySearchTree._left_descendant(node.right)
         else:
-            return BinarySearchTree._right_ancestor(node).data
+            return BinarySearchTree._right_ancestor(node)
 
     def range_search(self, start, end):
         """
@@ -294,24 +329,9 @@ class BinarySearchTree:
         self.__rebalance(node)
 
     def delete(self, key):
-        node = self.find(key)
-        if not node:
-            return
-
-        if node.right is None:
-            # promote node.left
-            node.left.parent = node.parent
-            node.parent.appropriate_child(node, node.left)
-
-        else:
-            next_node = self.next(node)     # node.right = None condition has already been checked
-            node.data = next_node.data
-
-            # Promote next_node.right
-            next_node.right.parent = next_node.parent
-            next_node.parent.left = next_node.right      # next_node is definitely left child
-
-        return
+        node = self.__delete(key)
+        self.size -= 1
+        self.__rebalance(node)
 
     @classmethod
     def create_tree(cls, arr):
@@ -326,116 +346,12 @@ def main():
     # arr = 1 2 3 4 5 6 7 9 12 34 56 76 23 67 478 736 463 87 47 76 3 64 25 73 78 63 45 09 63 545 55 46 31 4 1 16 15 11 0
     arr = list(map(int, input().split()))
     bst = BinarySearchTree.create_tree(arr)
+    arr = list(map(int, input().split()))
+    for ele in arr:
+        bst.delete(ele)
     print(bst)
     bst.root.print_tree()
 
 
 if __name__ == '__main__':
     main()
-
-    # def find(self, key, root):
-    #     if root is None:
-    #         return None
-    #     if root.key == key:
-    #         return root
-    #     elif root.key > key:
-    #         if root.left is not None:
-    #             return self.find(key, root.left)
-    #         return root
-    #     elif root.key < key:
-    #         if root.right is not None:
-    #             return self.find(key, root.right)
-    #         return root
-    #
-    # def left_descendant(self, node):
-    #     # returns the left most descendant of the given node
-    #     if node.left is None:
-    #         return node
-    #     return self.left_descendant(node.left)
-    #
-    # def right_ancestor(self, node):
-    #     # returns the first ancestor with greater value than node.key
-    #     if node.parent is None:
-    #         return None
-    #     if node.parent.key > node.key:
-    #         return node.parent
-    #     return self.right_ancestor(node.parent)
-    #
-    # def next(self, node):
-    #     if node.right:
-    #         return self.left_descendant(node.right)
-    #     else:
-    #         return self.right_ancestor(node)
-    #
-    # def search_range(self, x, y):
-    #     node = self.find(x, self.root)
-    #     range_list = []
-    #     while node.key <= y:
-    #         if node.key >= x:
-    #             range_list.append(node)
-    #         node = self.next(node)
-    #     return range_list
-    #
-    # def insert(self, key):
-    #     node = self.find(key, self.root)
-    #     new_node = Node(key)
-    #     if node is None:
-    #         self.root = new_node
-    #         return
-    #     if node.key > key:
-    #         node.left = new_node
-    #         new_node.parent = node
-    #     else:
-    #         node.right = new_node
-    #         new_node.parent = node
-    #
-    # def delete(self, node):
-    #     if node.right is None and node.left is None:
-    #         if node.parent.left is node:
-    #             node.parent.left = None
-    #         else:
-    #             node.parent.right = None
-    #             return
-    #
-    #     if node.right is None:
-    #         node.left.parent = node.parent
-    #         if node.parent.left is node:
-    #             node.parent.left = node.left
-    #         else:
-    #             node.parent.right = node.left
-    #
-    #         # if node.parent.key < node.left.key:
-    #         #     node.parent.right = node.left
-    #         # else:
-    #         #     node.parent.left = node.left
-    #     else:
-    #         x = self.next(node)
-    #         x.parent = node.parent
-    #         if node.parent.left is node:
-    #             node.parent.left = x
-    #         else:
-    #             node.parent.right = x
-    #
-    #     del node
-    #
-    # def print_inorder(self, root):
-    #     if not root:
-    #         return
-    #     self.print_inorder(root.left)
-    #     print(root.key)
-    #     self.print_inorder(root.right)
-    #
-    # def print_tree(self):
-    #     # BFS traversal of tree
-    #     if self.root is None:
-    #         print('Empty tree')
-    #         return
-    #     q = collections.deque()
-    #     q.appendleft(self.root)
-    #     while q:
-    #         node = q.pop()
-    #         print(node.key)
-    #         if node.left is not None:
-    #             q.appendleft(node.left)
-    #         if node.right is not None:
-    #             q.appendleft(node.right)

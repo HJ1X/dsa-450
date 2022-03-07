@@ -10,6 +10,41 @@ def height(root):
     return 1 + max(height(root.left), height(root.right))
 
 
+def is_complete(root):
+    """
+    The basic idea is that in complete BT every node after a non full-node
+    (having both children) should be leaf node
+    """
+    if root is None:
+        return True
+
+    queue = deque()
+    queue.append(root)
+
+    should_be_leaf = False
+
+    while queue:
+        node = queue.popleft()
+
+        # Processing left child
+        if node.left:
+            if should_be_leaf:
+                return False
+            queue.append(node.left)
+        else:
+            should_be_leaf = True
+
+        # Processing right child
+        if node.right:
+            if should_be_leaf:
+                return False
+            queue.append(node.right)
+        else:
+            should_be_leaf = True
+
+    return True
+
+
 def diameter_naive(root):
     if not root:
         return 0

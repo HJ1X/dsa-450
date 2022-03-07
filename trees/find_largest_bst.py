@@ -1,64 +1,47 @@
 # python 3
 
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.left = None
-        self.right = None
+from trees.tree_basics import BinaryTree
 
 
-class Tree:
-    def __init__(self, data):
-        self.root = Node(data)
+def find_largest_bst(root):
+    if not root:
+        return True, 0, float('inf'), float('-inf')
 
-    def add_node(self, data, node, where):
-        if where == 'l':
-            node.left = Node(data)
-        if where == 'r':
-            node.right = Node(data)
+    is_bst_left, size_bst_left, min_val_left, max_val_left = find_largest_bst(root.left)
+    is_bst_right, size_bst_right, min_val_right, max_val_right = find_largest_bst(root.right)
 
-    def preorder(self, root):
-        if root is None:
-            return
+    if is_bst_left and is_bst_right and max_val_left < root.data and min_val_right:
+        if max_val_left == float('-inf'):
+            max_val_left = root.data
+        if min_val_right == float('inf'):
+            min_val_right = root.data
+        return True, size_bst_left + size_bst_right + 1, max_val_left, min_val_right
+    else:
+        return False, max(size_bst_left, size_bst_right), 0, 0
 
-        print(root.data, end=' ')
-        self.preorder(root.left)
-        self.preorder(root.right)
 
-    def largest_bst(self, root):
-        # code here
-        if not root:
-            return True, 0, float('inf'), float('-inf')
+def largest_bst_util(root):
+    if root is None:
+        return float('inf'), float('-inf'), 0
 
-        # if not root.left and not root.right:
-        #     return True, 1, root.data, root.data
+    min_left, max_left, left_size = largest_bst_util(root.left)
+    min_right, max_right, right_size = largest_bst_util(root.right)
 
-        is_bst_left, size_bst_left, min_val_left, max_val_left = self.largest_bst(root.left)
-        is_bst_right, size_bst_right, min_val_right, max_val_right = self.largest_bst(root.right)
+    if max_left < root.data < min_right:
+        return max(max_left, root.data), min(min_right, root.data), 1 + left_size + right_size
 
-        if is_bst_left and max_val_left < root.data and is_bst_right and min_val_right > root.data:
-            if max_val_left == float('-inf'):
-                max_val_left = root.data
-            if min_val_right == float('inf'):
-                min_val_right = root.data
-            return True, size_bst_left + size_bst_right + 1, max_val_left, min_val_right
+    else:
+        return float('inf'), float('-inf'), 1
 
-        else:
-            return False, max(size_bst_left, size_bst_right), 0, 0
+
+def largest_bst(root):
+    return largest_bst_util(root)[2]
 
 
 def main():
-    tree = Tree(6)
-    tree.add_node(6, tree.root, 'l')
-    tree.add_node(2, tree.root.left, 'r')
-    tree.add_node(8, tree.root.left.right, 'r')
-    tree.add_node(3, tree.root, 'r')
-    tree.add_node(9, tree.root.right, 'l')
-    tree.add_node(3, tree.root.right, 'r')
-    tree.add_node(8, tree.root.right.left, 'l')
-    tree.add_node(2, tree.root.right.left, 'r')
-    tree.preorder(tree.root)
-    print(tree.largest_bst(tree.root))
+    string = input()
+    tree = BinaryTree.create_tree(string)
+    print(find_largest_bst(tree.root))
 
 
 if __name__ == '__main__':

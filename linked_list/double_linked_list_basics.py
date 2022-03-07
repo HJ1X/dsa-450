@@ -160,11 +160,8 @@ class DoubleLinkedList:
         if self.head is node:
             self.head = new_node
 
-    def print_list(self, head=None):
-        # Use print() function instead on object
-        if head is None:
-            head = self.head
-
+    @classmethod
+    def print_list(cls, head):
         curr = head
         while curr is not None:
             if curr.next is None:

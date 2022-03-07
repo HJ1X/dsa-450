@@ -1,7 +1,7 @@
 # python 3
 
-from linked_list.reverse_linked_list import Node
-from linked_list.reverse_linked_list import LinkedList
+from linked_list.linked_list_basics import Node
+from linked_list.linked_list_basics import LinkedList
 
 
 def divide(head):
@@ -30,7 +30,7 @@ def main():
     arr = list(map(int, input().split()))
     head = LinkedList.create_list(arr)
     head = divide(head)
-    LinkedList.print_list(head)
+    head.print_list()
 
 
 if __name__ == '__main__':

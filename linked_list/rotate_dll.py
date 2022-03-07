@@ -1,6 +1,6 @@
 # python 3
 
-from double_linked_list_class import DoubleLinkedList
+from double_linked_list_basics import DoubleLinkedList
 
 
 def rotate_by_1(head, tail):

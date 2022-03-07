@@ -1,5 +1,5 @@
 # python 3
-from double_linked_list_class import DoubleLinkedList
+from double_linked_list_basics import DoubleLinkedList
 
 
 def count_triplets_dll_hash_map(head, x):

@@ -1,83 +1,6 @@
 # Python 3
 
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-
-
-class LinkedList:
-    def __init__(self):
-        self.head = None
-        self.tail = None
-
-    def push(self, data):
-        new_node = Node(data)
-        new_node.next = self.head
-        self.head = new_node
-        if not self.tail:
-            self.tail = new_node
-
-    def push_back(self, data):
-        new_node = Node(data)
-        if not self.tail:
-            self.head = new_node
-            self.tail = new_node
-            return
-        self.tail.next = new_node
-        self.tail = new_node
-
-    def pop(self):
-        if not self.head:
-            return 'List empty'
-        temp = self.head
-        val = temp.data
-        if self.tail == self.head:
-            self.tail = None
-            self.head = None
-            del temp
-            return val
-        self.head = temp.next
-        del temp
-        return val
-
-    def pop_back(self):
-        if not self.head:
-            return 'List empty'
-        temp = self.head
-        if self.head == self.tail:
-            self.head = None
-            self.tail = None
-            val = temp.data
-            del temp
-            return val
-        while temp.next.next:
-            temp = temp.next
-        self.tail = temp
-        self.tail.next = None
-        val = temp.next.data
-        del temp.next
-        return val
-
-    def print_list(self):
-        curr = self.head
-        if not curr:
-            print('Empty list')
-        count = 0
-        while curr and count < 12:
-            print(curr.data)
-            curr = curr.next
-            count += 1
-
-    def create_loop(self, x):
-        if x == 0:
-            return
-
-        temp = self.head
-        for i in range(1, x):
-            temp = temp.next
-
-        self.tail.next = temp
+from linked_list.linked_list_basics import LinkedList, create_loop
 
 
 def find_loop(head):
@@ -96,14 +19,9 @@ def find_loop(head):
 
 
 def main():
-    linked_list = LinkedList()
-    linked_list.push_back(1)
-    linked_list.push_back(8)
-    linked_list.push_back(3)
-    linked_list.push_back(4)
-    linked_list.create_loop(0)
-    linked_list.print_list()
-
+    arr = list(map(int, input().split()))
+    linked_list = LinkedList.create_list(arr)
+    create_loop(linked_list.head, linked_list.tail, 2)
     print(find_loop(linked_list.head))
 
 
