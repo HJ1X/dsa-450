@@ -6,38 +6,19 @@
 # has the maximum number of 1's.
 
 def row_with_max_1s(arr, n, m):
-    # code here
+    row = 0
+    col = m - 1
 
-    # r = 0
-    # c = m - 1
-    #
-    # max_row = 0
-    # while r < n and c >= 0:
-    #     if arr[r][c - 1] == 1:
-    #         c -= 1
-    #
-    #     else:
-    #         r += 1
-    #         if r < n and arr[r][c] == 1:
-    #             max_row = r
-    #
-    # return max_row
-
-    # or
-
-    r = 0
-    c = m - 1
-
-    max_row = -1
-    while r < n and c >= 0:
-        if arr[r][c] == 1:
-            c -= 1
-            max_row = r
+    ans = -1
+    while row < n and col >= 0:
+        if arr[row][col] == 0:
+            row += 1
 
         else:
-            r += 1
+            ans = row
+            col -= 1
 
-    return max_row
+    return ans
 
 
 def main():

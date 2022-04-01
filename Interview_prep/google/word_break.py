@@ -2,6 +2,7 @@
 
 res = []
 
+
 def word_break(string, ans, dictionary):
     global res
 

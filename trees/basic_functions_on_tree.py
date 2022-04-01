@@ -10,6 +10,28 @@ def height(root):
     return 1 + max(height(root.left), height(root.right))
 
 
+def height_of_node(root, target):
+    pass
+
+
+def depth_of_node(root, target):
+    if root is None:
+        return -1
+
+    curr_depth = -1
+    if root.data == target:
+        return curr_depth + 1
+
+    curr_depth = depth_of_node(root.left, target)
+    if curr_depth > 0:
+        return curr_depth + 1
+    curr_depth = depth_of_node(root.right, target)
+    if curr_depth > 0:
+        return curr_depth + 1
+
+    return curr_depth
+
+
 def is_complete(root):
     """
     The basic idea is that in complete BT every node after a non full-node

@@ -8,7 +8,36 @@
 # 1. Using xor operations given below
 # 2. Using and operations and checking every bit till of n one by one. refer link
 
-def swap_bits(x, p1, p2, n):
+def swap_bit(n, p1, p2):
+    # left-shift 1 p1 and p2 times and using XOR
+    n ^= 1 << p1
+    n ^= 1 << p2
+    return n
+
+
+def swap_2_bits(x, p1, p2):
+    bit1 = x >> p1 & 1
+    bit2 = x >> p2 & 1
+
+    mask = bit1 ^ bit2
+    mask_swapper = (mask << p1) | (mask << p2)
+
+    return mask_swapper ^ x
+
+
+def swap_bits_n(x, p1, p2, n):
+    n_bits_from_p1 = (x >> p1) & ((1 << n) - 1)
+    n_bits_from_p2 = (x >> p2) & ((1 << n) - 1)
+
+    mask = n_bits_from_p1 ^ n_bits_from_p2
+
+    # Fitting mask in number
+    swapper_mask = (mask << p1) | (mask << p2)
+
+    return swapper_mask ^ x
+
+
+def swap_bits_same(x, p1, p2, n):
     # Ex. - n = 00101111      p1 = 1        p2 = 5         n = 3
 
     # Creating set1 of bits to be swapped. (1 << n) - 1 will set first n digits 1 and all others 0.
@@ -39,7 +68,7 @@ def swap_bits(x, p1, p2, n):
 
 def main():
     x, p1, p2, n = map(int, input().split())
-    print(swap_bits(x, p1, p2, n))
+    print(swap_bits_n(x, p1, p2, n))
 
 
 if __name__ == '__main__':

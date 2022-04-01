@@ -9,6 +9,27 @@
 # 3. Use hash set. If element is already present remove it else add it to the set.          O(N) and O(N)
 # 4. Use XOR. given below                                                                   O(N) and O(1)
 
+
+def find_numbers(nums):
+    xor = 0
+
+    for ele in nums:
+        xor ^= ele
+
+    mask = xor & -xor
+
+    num1 = 0
+    num2 = 0
+
+    for ele in nums:
+        if ele & mask > 0:
+            num1 ^= ele
+        else:
+            num2 ^= ele
+
+    return min(num1, num2), max(num1, num2)
+
+
 def find_non_repeating_using_xor(arr):
     n = len(arr)                     # Ex:- arr = [2, 4, 7, 9, 2, 4]
     sum_arr = 0

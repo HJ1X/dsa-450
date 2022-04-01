@@ -1,8 +1,6 @@
 # python 3
 
 def spiral_traverse(matrix, r, c):
-    # code here
-
     answer = []
     start_row, end_row = 0, r
     start_col, end_col = 0, c
@@ -28,6 +26,7 @@ def spiral_traverse(matrix, r, c):
         end_col -= 1
 
     return answer
+
 
 def main():
     mat = [[6, 6, 2, 28, 2], [12, 26, 3, 28, 7], [22, 25, 3, 4, 23]]

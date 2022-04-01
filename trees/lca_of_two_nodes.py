@@ -1,4 +1,5 @@
 # python 3
+
 from trees.tree_basics import Node
 
 
@@ -20,6 +21,10 @@ def lca(root, n1, n2):
         return left
     else:
         return root
+
+
+def lca_parent(root, n1, n2):
+    pass
 
 
 def lca_bst(root, n1, n2):

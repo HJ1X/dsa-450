@@ -8,8 +8,8 @@ class Node:
         self.next = None
         self.prev = None
 
-    def __str__(self):
-        return f'data: {self.data}'
+    def __repr__(self):
+        return f'Node({self.data})'
 
 
 class DoubleLinkedList:
@@ -26,6 +26,8 @@ class DoubleLinkedList:
                 return dll
             dll += str(curr.data) + ' <-> '
             curr = curr.next
+
+        return ' --'    # In case of empty DLL
 
     def __repr__(self):
         return_str = ''
@@ -52,6 +54,8 @@ class DoubleLinkedList:
             new_node.next.prev = new_node
             self.head = new_node
 
+        return new_node
+
     def push_back(self, data):
         new_node = Node(data)
         if not self.tail:
@@ -61,6 +65,8 @@ class DoubleLinkedList:
             self.tail.next = new_node
             new_node.prev = self.tail
             self.tail = new_node
+
+        return new_node
 
     def pop_front(self):
         if not self.head:
@@ -122,9 +128,27 @@ class DoubleLinkedList:
             temp = temp.next
 
     def erase_node(self, node):
-        node.prev.next = node.next
-        node.next.prev = node.prev
-        return
+        if not isinstance(node, Node):
+            return 'Node object is invalid'
+
+        if self.head is self.tail:    # Single node
+            self.head = None
+            self.tail = None
+
+        else:                         # At least two nodes
+            if node.prev:
+                node.prev.next = node.next
+            else:
+                self.head = node.next
+                node.next.prev = None
+
+            if node.next:
+                node.next.prev = node.prev
+            else:
+                self.tail = node.prev
+                node.prev.next = None
+
+        return node.data
 
     def empty(self):
         if not self.head:

@@ -1,14 +1,16 @@
-def check_smaller(element, matrix):
-    count = 0
-    for row in matrix:
+# python 3
 
+def find_smaller(matrix, target):
+    count = 0
+
+    for row in matrix:
         low = 0
         high = len(row) - 1
 
         while low <= high:
             mid = (low + high) // 2
 
-            if row[mid] <= element:
+            if row[mid] <= target:
                 low = mid + 1
             else:
                 high = mid - 1
@@ -18,20 +20,17 @@ def check_smaller(element, matrix):
     return count
 
 
-def median(matrix, r, c):
-    # code here
-
+def find_median(matrix, rows, cols):
     low = 0
-    high = 1e9
-
-    n_by_2 = (r * c) // 2
+    high = int(10e9)
+    half = (rows * cols) // 2
 
     while low <= high:
-        mid = (high + low) // 2
+        mid = (low + high) // 2
 
-        smaller_elements = check_smaller(mid, matrix)
+        smaller_numbers = find_smaller(matrix, mid)
 
-        if smaller_elements <= n_by_2:
+        if smaller_numbers <= half:
             low = mid + 1
         else:
             high = mid - 1
@@ -42,7 +41,7 @@ def median(matrix, r, c):
 def main():
     matrix = [[1, 3, 5], [2, 6, 9], [3, 6, 9]]
     r, c = 3, 3
-    print(median(matrix, r, c))
+    print(find_median(matrix, r, c))
 
 
 if __name__ == '__main__':

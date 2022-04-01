@@ -33,9 +33,9 @@ def check_mirror_tree_hash_map(e, nodes1, nodes2):
     return 1
 
 
-# The idea is to do a preorder traversal of tree1 and store in stacks and queues
+# The idea is to do a preorder traversal of tree1 and store in stack
 # Then, do a postorder traversal of tree2 and store in queue
-# Now, remove elements from stacks and queues and queue, if not equal return 'NOT MIRROR'
+# Now, remove elements from stacks and queues and check, if not equal return 'NOT MIRROR'
 
 def preorder_stack(root, stack):
     if root is None:
