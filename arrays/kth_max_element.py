@@ -39,7 +39,7 @@ def find_kth_largest(nums: List[int], k: int) -> int:
 
 
 def main():
-    arr = [3,2,1,5,6,4]
+    arr = [3, 2, 1, 5, 6, 4]
     k = 2
     print(find_kth_largest(arr, k))
 

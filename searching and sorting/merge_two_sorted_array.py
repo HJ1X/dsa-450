@@ -19,16 +19,13 @@ import math
 def merge_gfg(ar1, ar2):
     m = len(ar1)
     n = len(ar2)
-    # Iterate through all
-    # elements of ar2[] starting from
+
+    # Iterate through all elements of ar2[] starting from
     # the last element
     for i in range(n - 1, -1, -1):
 
-        # Find the smallest element
-        # greater than ar2[i]. Move all
-        # elements one position ahead
-        # till the smallest greater
-        # element is not found
+        # Find the smallest element greater than ar2[i]. Move all elements one position ahead
+        # till the smallest greater element is not found
         last = ar1[m - 1]
         j = m - 2
         while j >= 0 and ar1[j] > ar2[i]:

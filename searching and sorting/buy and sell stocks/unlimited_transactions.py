@@ -12,26 +12,43 @@ def find_max_profit(prices):
 
 def stock_buy_sell(prices, n):
     buy_index = 0
-    made_profit = False
-    max_profit = 0
+    ans = []
 
     for i in range(n - 1):
         if prices[i + 1] < prices[i]:
             if buy_index != i:
-                print('({} {})'.format(buy_index, i), end=' ')
-                max_profit += prices[i] - prices[buy_index]
-                made_profit = True
+                ans.append((buy_index, i))
             buy_index = i + 1
 
     if buy_index < n - 1 and prices[n - 1] - prices[buy_index] > 0:
-        print('({} {})'.format(buy_index, n - 1), end=' ')
-        max_profit += prices[n-1] - prices[buy_index]
-        made_profit = True
+        ans.append((buy_index, n - 1))
 
-    if not made_profit:
-        print('No Profit')
+    return ans
 
-    print(max_profit)
+
+def stock_buy_sell_2(prices, n):
+    max_profit = 0
+    ans = []
+
+    i = 0
+    while i < n - 1:
+        # Finding minimum value of stock to buy
+        while i < n - 1 and prices[i + 1] <= prices[i]:
+            i += 1
+        buy_index = i
+
+        if buy_index == n - 1:
+            break
+
+        # Finding maximum value of stock to sell
+        while i < n - 1 and prices[i + 1] >= prices[i]:
+            i += 1
+        sell_index = i
+
+        max_profit += prices[sell_index] - prices[buy_index]
+        ans.append((buy_index, sell_index))
+
+    return ans
 
 
 def main():
