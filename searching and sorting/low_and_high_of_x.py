@@ -54,6 +54,22 @@ def find_extreme(arr, n, target, find_left):
     return i
 
 
+n = int(input())
+l = int(input())
+arr = []
+for i in range(n):
+    arr.append(int(input()))
+
+arr.sort()
+left = find_extreme(arr, n, l, True)
+right = find_extreme(arr, n, l, False)
+
+if left == -1:
+    print('Not found')
+else:
+    print(left, right)
+
+
 def find(arr, n, x):
     left = find_extreme(arr, n, x, True)
     right = find_extreme(arr, n, x, False)
